@@ -1,0 +1,102 @@
+# --- Weak Password Storage ---
+(password|passwd|pwd)\s*=\s*["'][^"']*["']
+# Plain text password storage
+
+(user\.password|user\.passwd|user\.pwd)\s*=\s*
+# User password assignment without hashing indication
+
+# --- Insecure Authentication Methods ---
+(MD5|md5)\(.*password
+# MD5 hashing for passwords (weak)
+
+(SHA1|sha1)\(.*password
+# SHA1 hashing for passwords (weak)
+
+bcrypt\.compare\s*\(\s*.*,\s*.*,\s*\d+\s*\)
+# Bcrypt with potentially low rounds (needs manual verification)
+
+# --- Hardcoded Credentials ---
+(const|let|var)\s+(password|secret|token|apiKey|api_key|key)\s*=\s*["'][A-Za-z0-9+/=_\-]{8,}["']
+# Hardcoded credentials as strings
+
+(password|secret|token|apiKey|api_key|key)\s*:\s*["'][A-Za-z0-9+/=_\-]{8,}["']
+# Hardcoded credentials in objects
+
+process\.env\.(PASSWORD|SECRET|TOKEN|API_KEY|KEY)\s*=\s*["'][A-Za-z0-9+/=_\-]{8,}["']
+# Setting sensitive environment variables directly
+
+# --- JWT Issues ---
+jwt\.sign\s*\(\s*.*,\s*["'][^"']{8,}["']
+# JWT signing with potentially hardcoded secret
+
+jwt\.sign\s*\(\s*.*,\s*.*,\s*\{\s*expiresIn\s*:\s*(["']?)(6h|12h|1d|7d|30d|365d|inf|infinite|\d{5,})\1
+# JWT with very long expiration
+
+jwt\.verify\s*\(\s*.*,\s*["'][^"']{8,}["']
+# JWT verification with potentially hardcoded secret
+
+jwt\.sign\s*\(\s*.*\)\s*\/\/\s*.*no\s*expir(y|ation)
+# JWT with no expiration (comment indicates)
+
+# --- Missing Authentication ---
+(app|router)\.(get|post|put|delete|patch)\s*\(\s*["']\/api\/.*["']\s*,\s*\([^)]*\)\s*=>\s*\{
+# API routes without middleware (potential lack of auth)
+
+router\.use\s*\(\s*[^,]*\)\s*\/\/\s*.*skip\s*auth
+# Commented skipping of authentication
+
+# --- Session Issues ---
+(session|cookieSession)\s*\(\s*\{\s*[^}]*secret\s*:\s*["'][^"']{1,8}["']
+# Session with weak secret (less than 8 chars)
+
+(session|cookieSession)\s*\(\s*\{\s*[^}]*secure\s*:\s*false
+# Session with secure flag set to false
+
+(session|cookieSession)\s*\(\s*\{\s*[^}]*httpOnly\s*:\s*false
+# Session with httpOnly flag set to false
+
+# --- CSRF Issues ---
+csrf\s*:\s*false|CSRF\s*:\s*false
+# Disabled CSRF protection in config
+
+// Disable CSRF
+# Comment indicating CSRF is disabled
+
+# --- Authentication Bypass ---
+(req|request)\.(user|account|session)(\.[a-zA-Z0-9_]+)?\s*=\s*
+# Direct assignment to user or session object
+
+(isAdmin|isAuthenticated|isLoggedIn|is_admin)\s*=\s*true
+# Direct setting of authentication flags
+
+# --- Rate Limiting Issues ---
+(let|var|const)\s+loginAttempts\s*=\s*0
+# Login attempts counter without persistence
+
+# --- Remember Me Functionality ---
+remember(Me|Password|User).*\{\s*[^}]*secure\s*:\s*false
+# Insecure remember me functionality
+
+# --- Password Reset ---
+(generateToken|createToken|resetToken)\s*=\s*Math\.random\(\)
+# Weak token generation for password reset
+
+# --- OAuth Issues ---
+client(Secret|Id)\s*:\s*["'][^"']+["']
+# Hardcoded OAuth credentials
+
+# --- Two-Factor Authentication (2FA) Issues ---
+(twoFactor|2fa|mfa)\s*:\s*false
+# Disabled two-factor authentication
+
+# --- Logging Credentials ---
+console\.(log|debug|info|warn|error)\s*\(\s*.*password
+# Logging password information
+
+# --- Basic Authentication ---
+headers\.authorization\s*=\s*["']Basic\s+
+# Hardcoded Basic Authentication
+
+# --- Insecure Random ---
+Math\.random\(\).*token
+# Using Math.random for security tokens
