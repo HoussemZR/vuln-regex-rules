@@ -1,5 +1,4 @@
 # --- Direct DOM Manipulation ---
-
 document\.write\s*\(
 # Use of document.write(), often abused for dynamic content injection
 
@@ -10,17 +9,13 @@ element\.setAttribute\s*\(\s*["'](src|href|on\w+)["']\s*,\s*[^)]+
 # Dynamically setting potentially dangerous attributes
 
 # --- React / JSX / Framework Patterns ---
-
 dangerouslySetInnerHTML\s*=\s*\{
 # React: dangerouslySetInnerHTML is an intentional XSS risk point
 
 # --- Template Injection / Improper Sanitization ---
-
 (\$\{.*\})\s*;?
 # Unescaped template string that could allow injection
 
 # --- Angular or Custom Bindings (Optional) ---
-
 \[innerHTML\]\s*=\s*["'][^"']*["']
 # Angular: binding to [innerHTML] without sanitization
-

@@ -1,0 +1,83 @@
+# --- OS Command Injection ---
+(exec|spawn|execSync|spawnSync)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# NodeJS child_process methods with variable input
+
+(execFile|fork|execFileSync)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# More NodeJS child_process methods
+
+child_process\.(exec|spawn|execSync|spawnSync|execFile|fork|execFileSync)
+# Full child_process method calls
+
+(sh|bash)\s+-c\s+["'`].*\$\{.*\}
+# Shell execution with template literals
+
+process\.exec\s*\(
+# Process execution
+
+# --- SQL Injection ---
+(query|execute|executeQuery)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Raw SQL query execution with variable concatenation
+
+connection\.(query|execute)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Database connection query methods
+
+pool\.(query|execute)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Connection pool query methods
+
+db\.(query|execute|all|get|run)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Generic database query methods
+
+knex\.raw\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Knex.js raw queries
+
+sequelize\.query\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Sequelize raw queries
+
+(SELECT|INSERT|UPDATE|DELETE|UNION|DROP|ALTER)\s+.*\$\{
+# SQL keywords in template literals
+
+# --- NoSQL Injection ---
+(collection|model)\.(find|findOne|findById|update|updateOne|updateMany)\s*\(\s*\{.*\$\{.*\}
+# MongoDB/Mongoose query methods with template literals
+
+db\.(collection|find|findOne|update|delete)\s*\(\s*\{.*\$\{.*\}
+# Generic NoSQL operations with interpolation
+
+# --- Command-Line Arguments Injection ---
+process\.argv
+# Access to command line arguments
+
+# --- Path Traversal / File Injection ---
+(fs\.(readFile|writeFile|appendFile|readFileSync|writeFileSync|appendFileSync))\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# File system operations with variable paths
+
+(path\.join|path\.resolve)\s*\(\s*.*\$\{.*\}
+# Path manipulation with variables
+
+(require|import)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Dynamic imports/requires with variables
+
+# --- Template Injection ---
+(new\s+Function\s*\(\s*|Function\s*\(\s*)\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Dynamic function creation with variable content
+
+eval\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Eval with variable input
+
+(setInterval|setTimeout)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Timer functions with string eval
+
+# --- HTML/JavaScript Injection (beyond XSS) ---
+document\.domain\s*=\s*(["'`].*\$\{.*\}.*["'`]|[^;]+\s*\+\s*)
+# Setting document.domain with variables
+
+location\.(href|hash|search|pathname)\s*=\s*(["'`].*\$\{.*\}.*["'`]|[^;]+\s*\+\s*)
+# Setting location properties with variables
+
+# --- HTTP Header Injection ---
+(res|response)\.(setHeader|set)\s*\(\s*["'`][^"'`]+["'`]\s*,\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Setting HTTP headers with variables
+
+# --- GraphQL Injection ---
+(gql|graphql)\s*`.*\$\{.*\}`
+# GraphQL queries with variables
