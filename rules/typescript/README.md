@@ -13,7 +13,7 @@ Since TypeScript introduces static typing and other syntactic features beyond Ja
 | `injection.regex`         | Detects SQL, command, and code injection risks   |
 | `xss.regex`               | Detects cross-site scripting vulnerabilities     |
 | `authentication.regex`    | Detects broken or insecure authentication logic  |
-| `idor.regex`              | Detects insecure direct object references        |
+| `ssrf.regex`              | Detects insecure direct object references        |
 
 ---
 
