@@ -1,0 +1,93 @@
+# --- HTTP Client Libraries ---
+(axios|fetch|got|request|superagent|http\.get|https\.get)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# HTTP clients with variable URLs
+
+(axios|fetch|got|request|superagent)\s*\(\s*\{[^}]*url\s*:\s*(["'`].*\$\{.*\}.*["'`]|[^,}]+\s*\+\s*)
+# HTTP clients with URL in config object
+
+new\s+(URL|Request)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# URL/Request constructor with variable input
+
+# --- URL Parsing ---
+url\.parse\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# URL parsing with variables
+
+(new\s+)?URL\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# URL constructor with variables
+
+# --- HTTP/HTTPS Module ---
+https?\.(request|get)\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Node.js http/https module with variable URLs
+
+https?\.(request|get)\s*\(\s*\{[^}]*hostname\s*:\s*(["'`].*\$\{.*\}.*["'`]|[^,}]+\s*\+\s*)
+# http/https with hostname in options
+
+https?\.(request|get)\s*\(\s*\{[^}]*host\s*:\s*(["'`].*\$\{.*\}.*["'`]|[^,}]+\s*\+\s*)
+# http/https with host in options
+
+https?\.(request|get)\s*\(\s*\{[^}]*path\s*:\s*(["'`].*\$\{.*\}.*["'`]|[^,}]+\s*\+\s*)
+# http/https with path in options
+
+# --- File/Network Protocol Indicators ---
+(["'`])(https?|ftp|file|gopher|dict|ws|wss)://[^"'`]*\$\{[^}]*\}
+# URL schemes with template literals
+
+(url|uri|endpoint|href|src)\s*[:=]\s*(["'`])(https?|ftp|file|gopher|dict|ws|wss)://[^"'`]*\$\{[^}]*\}
+# URL variables with template literals
+
+(url|uri|endpoint|href|src)\s*[:=]\s*(["'`])(https?|ftp|file|gopher|dict|ws|wss)://
+# URL variables with potentially user-controlled input
+
+# --- File System Access via URL ---
+fs\.(readFile|readFileSync|writeFile|writeFileSync)\s*\(\s*(["'`])(https?|ftp|file)://
+# File operations with URLs
+
+# --- Redis/Memcached ---
+redis\.createClient\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Redis client with variable connection string
+
+new\s+memcached\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Memcached client with variable server specification
+
+# --- XML Parsing ---
+(libxmljs|xml2js|fast-xml-parser).*\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# XML parsing with variables (potential XXE leads to SSRF)
+
+# --- WebSockets ---
+new\s+WebSocket\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# WebSocket connection with variable URL
+
+# --- Proxy Configuration ---
+proxy\s*[:=]\s*(["'`].*\$\{.*\}.*["'`]|[^,;)]+\s*\+\s*)
+# Proxy configuration with variables
+
+# --- DNS Lookups ---
+(dns\.(lookup|resolve|resolve4|resolve6|resolveAny))\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# DNS resolution with variable hostnames
+
+# --- GraphQL ---
+(fetch|execute)Query\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# GraphQL queries with variables
+
+# --- Request Parameters ---
+baseURL\s*[:=]\s*(["'`].*\$\{.*\}.*["'`]|[^,;)]+\s*\+\s*)
+# Base URL with variables
+
+# --- Webhook Processing ---
+(webhook|callback|hook)\s*(URL|Url|url)\s*[:=]\s*(["'`].*\$\{.*\}.*["'`]|[^,;)]+\s*\+\s*)
+# Webhook URL processing
+
+# --- CURL Execution ---
+exec\s*\(\s*(["'`]curl\s+.*\$\{.*\}.*["'`]|["'`]curl\s+[^"'`]+["'`])
+# Command execution of curl with dynamic parts
+
+# --- Known SSRF Vulnerable Methods ---
+\.open\s*\(\s*(["'`]GET\s*["'`]|["'`]POST\s*["'`])\s*,\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# XMLHttpRequest open method
+
+\.openUrl\s*\(\s*(["'`].*\$\{.*\}.*["'`]|[^,)]+\s*\+\s*)
+# Various openUrl methods
+
+# --- Third-Party Integration URLs ---
+(stripe|mailchimp|sendgrid|twilio|aws|azure|gcp)\.(url|endpoint|api|host)\s*[:=]\s*(["'`].*\$\{.*\}.*["'`]|[^,;)]+\s*\+\s*)
+# Third-party service endpoints with variables
